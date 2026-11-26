@@ -75,7 +75,7 @@ label.l{display:block;font-weight:600;font-size:14px;margin:14px 0 6px;color:var
 <button class="reset" id="reset">Start new walk</button>
 </div>
 <script>
-var SECS=[{"id": "s0", "t": "Chiller 1: Salad chiller", "h": "Veg, salad, customer salads, prawns, gravlax", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers correct and FIFO rotated?"}, {"q": "All items in date?"}, {"q": "Veg (capsicum, cucumber, tomato, onion) fresh, no spoilage?", "p": 1}, {"q": "Spinach and salad leaf in date, no slime or bugs?", "p": 1}, {"q": "Customer salads labelled, in date and FIFO rotated?", "p": 1}, {"q": "Defrosting prawns labelled with thaw date and FIFO rotated?", "p": 1}, {"q": "Veggie dogs and gravlax labelled, in date and FIFO rotated?"}, {"q": "Raw kept separate from ready-to-eat?"}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s1", "t": "Fruit and Veg Treatment", "h": "Salad and Vegetable Wash Procedure", "qs": [{"q": "Wash procedure followed in full?"}, {"q": "Is vegetable wash available?", "p": 1}, {"q": "Sink, colander and equipment clean?", "p": 1}, {"q": "Salad leaf inspected leaf by leaf for bugs?", "p": 1}, {"q": "Washed product drained, covered and dated?", "p": 1}, {"q": "Can coworker explain the wash procedure?"}]}, {"id": "s2", "t": "Chiller 2", "h": "Cakes, drinks, prepped salads, lingonberry jam, yoghurt, sauces", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers correct and FIFO rotated?", "p": 1}, {"q": "All items in date?"}, {"q": "Cakes and prepped salads labelled, in date and FIFO rotated?", "p": 1}, {"q": "Yoghurt, jam and sauces in date, opened items dated?"}, {"q": "Opened items sealed, labelled and dated?"}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s3", "t": "Chiller 3: Defrost chiller", "h": "Coworker food and thawing items, attached to walk-in freezer", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers and thaw dates correct, FIFO rotated?", "p": 1}, {"q": "Defrosting/Thawing items (rice, dahl, creamed spinach, salmon) within date?", "p": 1}, {"q": "Coworker food separate and labelled?", "p": 1}, {"q": "Freezer door seal and floor clear of ice?", "p": 1}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s4", "t": "Freezer", "h": "", "qs": [{"q": "Date stickers correct and FIFO rotated?", "p": 1}]}, {"id": "s5", "t": "Dry storage", "h": "Fruit and all ambient items", "qs": [{"q": "All items in date, FIFO rotated?", "p": 1}, {"q": "Fruit fresh, no mould?", "p": 1}, {"q": "Stock off the floor?"}, {"q": "Opened items sealed, labelled and dated?"}, {"q": "Area clean and dry?", "p": 1}]}, {"id": "s6", "t": "Coworker restaurant fridge", "h": "Coworker lunches and milk for the coffee machine", "qs": [{"q": "Fridge temp (°C, max 5)", "temp": 1}, {"q": "Old or unlabelled lunches cleared?", "p": 1}, {"q": "Fridge clean?", "p": 1}]}];
+var SECS=[{"id": "s0", "t": "Chiller 1: Salad chiller", "h": "Veg, salad, customer salads, prawns, gravlax", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers correct and FIFO rotated?"}, {"q": "All items in date?"}, {"q": "Veg (capsicum, cucumber, tomato, onion) fresh, no spoilage?", "p": 1}, {"q": "Spinach and salad leaf in date, no slime or bugs?", "p": 1}, {"q": "Customer salads labelled, in date and FIFO rotated?", "p": 1}, {"q": "Defrosting prawns labelled with thaw date and FIFO rotated?", "p": 1}, {"q": "Veggie dogs and salmon labelled, in date and kept separate from raw?"}, {"q": "Gravlax labelled, in date and FIFO rotated?", "p": 1}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s1", "t": "Fruit and Veg Treatment", "h": "Salad and Vegetable Wash Procedure", "qs": [{"q": "Wash procedure followed in full?"}, {"q": "Is vegetable wash available?", "p": 1}, {"q": "Sink and colander clean?", "p": 1}, {"q": "Spinach and Salad leaf inspected leaf by leaf for bugs?", "p": 1}, {"q": "Washed product drained, covered and dated?", "p": 1}, {"q": "Can coworker explain the wash procedure?"}]}, {"id": "s2", "t": "Chiller 2", "h": "Cakes, drinks, prepped salads, sauces", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers correct and FIFO rotated?"}, {"q": "All items in date?"}, {"q": "Cakes labelled and in date?", "p": 1}, {"q": "Opened items sealed, labelled and dated?"}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s3", "t": "Chiller 3: Defrost chiller", "h": "Coworker food and thawing items, lingonberry jam, yoghurt", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers and thaw dates correct, FIFO rotated?", "p": 1}, {"q": "Defrosting/Thawing items (rice, dahl, creamed spinach, salmon, vegetable rice) within date?", "p": 1}, {"q": "Coworker food separate, labelled and in date?", "p": 1}, {"q": "Salmon labelled, in date and FIFO rotated?", "p": 1}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s4", "t": "Freezer", "h": "", "qs": [{"q": "Freezer temp (°C, max -15)", "temp": 1}, {"q": "Date stickers correct and FIFO rotated?", "p": 1}, {"q": "Freezer door seal and floor clear of ice?", "p": 1}]}, {"id": "s5", "t": "Dry storage", "h": "All ambient items", "qs": [{"q": "All items in date, FIFO rotated?", "p": 1}, {"q": "Stock off the floor?"}, {"q": "Opened items sealed, labelled and dated?"}, {"q": "Area clean and dry?", "p": 1}]}, {"id": "s6", "t": "Coworker restaurant fridge", "h": "Coworker lunches and milk for the coffee machine", "qs": [{"q": "Fridge temp (°C, max 5)", "temp": 1}, {"q": "Old or unlabelled lunches cleared?", "p": 1}, {"q": "Fridge clean?", "p": 1}]}];
 var S={a:{},t:{},qn:{},n:{},p:{},m:{name:"",actions:""}};
 function hash(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return String(h)}
 var VER=hash(JSON.stringify(SECS)),FRESH=false;
@@ -83,9 +83,11 @@ try{var r=localStorage.getItem("fsw3");if(r){var o=JSON.parse(r);if(o.v===VER){f
 function save(){try{var c={v:VER,a:S.a,t:S.t,qn:S.qn,n:S.n,m:S.m};localStorage.setItem("fsw3",JSON.stringify(c));}catch(e){}}
 function $(s){return document.querySelector(s)}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var LIM={};
+function lim(o){var m=/max\s*(-?[0-9.]+)/.exec(o.q);return m?parseFloat(m[1]):5}
 function qhtml(id,q){
 var o=typeof q==="string"?{q:q}:q,v=S.a[id],h='<div class="q'+(v==="No"?" flag":"")+(o.p?" pho":"")+'" id="q-'+id+'"><p>'+esc(o.q)+'</p>';
-if(o.temp){h+='<div class="temp"><input type="number" inputmode="decimal" step="0.1" placeholder="°C" data-t="'+id+'" value="'+esc(S.t[id])+'"><span id="tw-'+id+'"></span></div>'}
+if(o.temp){LIM[id]=lim(o);var ng=LIM[id]<0;h+='<div class="temp"><input type="'+(ng?"text":"number")+'" inputmode="'+(ng?"text":"decimal")+'" step="0.1" placeholder="'+(ng?"e.g. -18":"°C")+'" data-t="'+id+'" value="'+esc(S.t[id])+'"><span id="tw-'+id+'"></span></div>'}
 else{h+='<div class="opts">';["Yes","No","N/A"].forEach(function(x){h+='<button data-q="'+id+'" data-v="'+x+'" class="'+(v===x?"on":"")+'">'+x+'</button>'});h+='</div>'}
 return h+'<div class="photos" id="ph-'+id+'"></div><label class="add">📷 Add photo<input type="file" accept="image/*" multiple hidden data-p="'+id+'"></label><textarea class="qn" placeholder="What is the issue? What was done about it?" data-qn="'+id+'">'+esc(S.qn[id])+'</textarea></div>';
 }
@@ -106,8 +108,8 @@ upd();
 function tempNote(id){
 var el=$("#tw-"+id),v=S.t[id];if(!el)return;
 if(v===""||v==null){el.textContent="";return}
-var n=parseFloat(v);
-el.innerHTML=n>5?'<b class="hi">Above 5°C. Flagged.</b>':'<b style="color:var(--ok)">OK</b>';
+var n=parseFloat(v),L=LIM[id];if(isNaN(n)){el.textContent="";return}
+el.innerHTML=n>L?'<b class="hi">Above '+L+'°C. Flagged.</b>':'<b style="color:var(--ok)">OK</b>';
 }
 function upd(){
 var done=0,total=0,flags=0;
@@ -134,7 +136,7 @@ if(x){var p=x.dataset.x.split(":");S.p[p[0]].splice(+p[1],1);photos(p[0]);savePh
 });
 $("#app").addEventListener("input",function(e){
 var d=e.target.dataset;
-if(d.t){var id=d.t,v=e.target.value;S.t[id]=v;S.a[id]=v===""?"":(parseFloat(v)>5?"No":"Yes");
+if(d.t){var id=d.t,v=e.target.value.replace("\u2212","-");S.t[id]=v;var tn=parseFloat(v);S.a[id]=isNaN(tn)?"":(tn>LIM[id]?"No":"Yes");
 $("#q-"+id).classList.toggle("flag",S.a[id]==="No");tempNote(id)}
 else if(d.qn)S.qn[d.qn]=e.target.value;
 else if(d.n)S.n[d.n]=e.target.value;
