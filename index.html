@@ -47,6 +47,11 @@ label.l{display:block;font-weight:600;font-size:14px;margin:14px 0 6px;color:var
 .ph button{position:absolute;top:-6px;right:-6px;width:26px;height:26px;border-radius:50%;border:0;background:var(--blue);color:#fff;font-size:16px;line-height:1}
 .add{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border:1.5px dashed var(--blue);color:var(--blue);border-radius:6px;font-weight:600;cursor:pointer}
 .q .add{display:none;margin:8px 8px 0 0}.q.pho .add,.q.flag .add{display:inline-flex}
+.camb{display:flex;align-items:center;justify-content:space-between;padding:16px 20px calc(16px + env(safe-area-inset-bottom,0px));background:#000;color:#fff}
+#shutter{width:72px;height:72px;border-radius:50%;border:4px solid #fff;background:#ffcc00}
+#camdone{min-width:84px;min-height:44px;border:0;border-radius:6px;background:#ffcc00;color:#003399;font:inherit;font-weight:700}
+#camcount{min-width:84px;font-weight:600}
+button.add{background:#fff;font-family:inherit;font-size:inherit}
 .pdf{width:100%;min-height:52px;margin-top:8px;border:0;border-radius:6px;background:var(--yel);color:var(--blue);font:inherit;font-weight:700}
 .pdf:disabled{opacity:.45}
 .reset{width:100%;min-height:44px;margin-top:16px;border:1.5px solid var(--line);border-radius:6px;background:#fff;color:var(--mute);font:inherit;font-weight:600}
@@ -74,6 +79,10 @@ label.l{display:block;font-weight:600;font-size:14px;margin:14px 0 6px;color:var
 <p id="msg" role="status" style="margin:8px 0 0;font-size:14px;min-height:20px"></p>
 <button class="reset" id="reset">Start new walk</button>
 </div>
+<div id="cam" style="display:none;position:fixed;inset:0;background:#000;z-index:50;flex-direction:column;padding-top:env(safe-area-inset-top,0px)">
+<video id="camv" playsinline autoplay muted style="flex:1;min-height:0;width:100%;object-fit:contain"></video>
+<div class="camb"><span id="camcount">0 taken</span><button id="shutter" aria-label="Take photo"></button><button id="camdone">Done</button></div>
+</div>
 <script>
 var SECS=[{"id": "s0", "t": "Chiller 1: Salad chiller", "h": "Veg, salad, customer salads, prawns, gravlax", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers correct and FIFO rotated?"}, {"q": "All items in date?"}, {"q": "Veg (capsicum, cucumber, tomato, onion) fresh, no spoilage?", "p": 1}, {"q": "Spinach and salad leaf in date, no slime or bugs?", "p": 1}, {"q": "Customer salads labelled, in date and FIFO rotated?", "p": 1}, {"q": "Defrosting prawns labelled with thaw date and FIFO rotated?", "p": 1}, {"q": "Veggie dogs and salmon labelled, in date and kept separate from raw?"}, {"q": "Gravlax labelled, in date and FIFO rotated?", "p": 1}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s1", "t": "Fruit and Veg Treatment", "h": "Salad and Vegetable Wash Procedure", "qs": [{"q": "Wash procedure followed in full?"}, {"q": "Is vegetable wash available?", "p": 1}, {"q": "Sink and colander clean?", "p": 1}, {"q": "Spinach and Salad leaf inspected leaf by leaf for bugs?", "p": 1}, {"q": "Washed product drained, covered and dated?", "p": 1}, {"q": "Can coworker explain the wash procedure?"}]}, {"id": "s2", "t": "Chiller 2", "h": "Cakes, drinks, prepped salads, sauces", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers correct and FIFO rotated?"}, {"q": "All items in date?"}, {"q": "Cakes labelled and in date?", "p": 1}, {"q": "Opened items sealed, labelled and dated?"}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s3", "t": "Chiller 3: Defrost chiller", "h": "Coworker food and thawing items, lingonberry jam, yoghurt", "qs": [{"q": "Chiller temp (°C, max 5)", "temp": 1}, {"q": "Date stickers and thaw dates correct, FIFO rotated?", "p": 1}, {"q": "Defrosting/Thawing items (rice, dahl, creamed spinach, salmon, vegetable rice) within date?", "p": 1}, {"q": "Coworker food separate, labelled and in date?", "p": 1}, {"q": "Salmon labelled, in date and FIFO rotated?", "p": 1}, {"q": "Chiller clean?", "p": 1}]}, {"id": "s4", "t": "Freezer", "h": "", "qs": [{"q": "Freezer temp (°C, max -15)", "temp": 1}, {"q": "Date stickers correct and FIFO rotated?", "p": 1}, {"q": "Freezer door seal and floor clear of ice?", "p": 1}]}, {"id": "s5", "t": "Dry storage", "h": "All ambient items", "qs": [{"q": "All items in date, FIFO rotated?", "p": 1}, {"q": "Stock off the floor?"}, {"q": "Opened items sealed, labelled and dated?"}, {"q": "Area clean and dry?", "p": 1}]}, {"id": "s6", "t": "Coworker restaurant fridge", "h": "Coworker lunches and milk for the coffee machine", "qs": [{"q": "Fridge temp (°C, max 5)", "temp": 1}, {"q": "Old or unlabelled lunches cleared?", "p": 1}, {"q": "Fridge clean?", "p": 1}]}];
 var S={a:{},t:{},qn:{},n:{},p:{},m:{name:"",actions:""}};
@@ -89,7 +98,7 @@ function qhtml(id,q){
 var o=typeof q==="string"?{q:q}:q,v=S.a[id],h='<div class="q'+(v==="No"?" flag":"")+(o.p?" pho":"")+'" id="q-'+id+'"><p>'+esc(o.q)+'</p>';
 if(o.temp){LIM[id]=lim(o);var ng=LIM[id]<0;h+='<div class="temp"><input type="'+(ng?"text":"number")+'" inputmode="'+(ng?"text":"decimal")+'" step="0.1" placeholder="'+(ng?"e.g. -18":"°C")+'" data-t="'+id+'" value="'+esc(S.t[id])+'"><span id="tw-'+id+'"></span></div>'}
 else{h+='<div class="opts">';["Yes","No","N/A"].forEach(function(x){h+='<button data-q="'+id+'" data-v="'+x+'" class="'+(v===x?"on":"")+'">'+x+'</button>'});h+='</div>'}
-return h+'<div class="photos" id="ph-'+id+'"></div><label class="add">📷 Take photo<input type="file" accept="image/*" capture="environment" hidden data-p="'+id+'"></label><label class="add">🖼 Gallery<input type="file" accept="image/*" multiple hidden data-p="'+id+'"></label><textarea class="qn" placeholder="What is the issue? What was done about it?" data-qn="'+id+'">'+esc(S.qn[id])+'</textarea></div>';
+return h+'<div class="photos" id="ph-'+id+'"></div><button type="button" class="add" data-cam="'+id+'">📷 Take photos</button><input type="file" accept="image/*" capture="environment" hidden data-p="'+id+'" data-cap="'+id+'"><label class="add">🖼 Gallery<input type="file" accept="image/*" multiple hidden data-p="'+id+'"></label><textarea class="qn" placeholder="What is the issue? What was done about it?" data-qn="'+id+'">'+esc(S.qn[id])+'</textarea></div>';
 }
 function build(){
 var h="";
@@ -131,6 +140,7 @@ var b=e.target.closest("button[data-q]");
 if(b){var id=b.dataset.q,v=b.dataset.v;S.a[id]=S.a[id]===v?"":v;
 var q=$("#q-"+id);q.querySelectorAll("button").forEach(function(x){x.classList.toggle("on",x.dataset.v===S.a[id])});
 q.classList.toggle("flag",S.a[id]==="No");save();upd();return}
+var c=e.target.closest("button[data-cam]");if(c){openCam(c.dataset.cam);return}
 var x=e.target.closest("button[data-x]");
 if(x){var p=x.dataset.x.split(":");S.p[p[0]].splice(+p[1],1);photos(p[0]);savePh(p[0])}
 });
@@ -239,6 +249,27 @@ function idb(cb){try{var r=indexedDB.open("fsw",1);r.onupgradeneeded=function(){
 function savePh(id){if(!DB)return;try{DB.transaction("p","readwrite").objectStore("p").put(S.p[id]||[],id)}catch(e){}}
 function clearPh(){if(!DB)return;try{DB.transaction("p","readwrite").objectStore("p").clear()}catch(e){}}
 function loadPh(){if(!DB)return;try{var rq=DB.transaction("p","readonly").objectStore("p").openCursor();rq.onsuccess=function(){var c=rq.result;if(c){S.p[c.key]=c.value;photos(c.key);c.continue()}}}catch(e){}}
+var camId=null,camStream=null;
+function fbCam(id){var i=document.querySelector('input[data-cap="'+id+'"]');if(i)i.click()}
+async function openCam(id){
+if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){fbCam(id);return}
+try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1920},height:{ideal:1080}},audio:false})}catch(e){fbCam(id);return}
+camId=id;$("#camv").srcObject=camStream;$("#cam").style.display="flex";updCam();
+}
+function closeCam(){if(camStream){camStream.getTracks().forEach(function(t){t.stop()});camStream=null}$("#camv").srcObject=null;$("#cam").style.display="none";camId=null}
+function updCam(){$("#camcount").textContent=((S.p[camId]||[]).length)+" taken"}
+function shoot(){
+var v=$("#camv");if(!v.videoWidth||!camId)return;
+var c=document.createElement("canvas"),s=Math.min(1,1000/Math.max(v.videoWidth,v.videoHeight));
+c.width=Math.round(v.videoWidth*s);c.height=Math.round(v.videoHeight*s);
+c.getContext("2d").drawImage(v,0,0,c.width,c.height);
+(S.p[camId]=S.p[camId]||[]).push(c.toDataURL("image/jpeg",.7));
+photos(camId);savePh(camId);updCam();
+try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}
+v.style.opacity=.4;setTimeout(function(){v.style.opacity=1},90);
+}
+$("#shutter").addEventListener("click",shoot);
+$("#camdone").addEventListener("click",closeCam);
 var armed=0;
 $("#reset").addEventListener("click",function(){
 var b=this;
